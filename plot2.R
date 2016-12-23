@@ -24,7 +24,6 @@ readData <- function () {
 # This function makes `plot2.png`.
 plot2 <- function () {
         data <- readData()
-        datetimeRange <- range(data$datetime)
         png('plot2.png', bg='transparent', width=480, height=480)
         plot(data$Global_active_power ~ data$datetime, data, type='l',
              ylab = 'Global Active Power (kilowatts)',
