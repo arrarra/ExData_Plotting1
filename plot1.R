@@ -17,8 +17,7 @@ readData <- function () {
         # Select data from days Feb. 1st and 2nd, year 2007. 
         data <- allData[Date == '1/2/2007' | Date == '2/2/2007',]
         # Add a new field `datetime`. It combines fields `Date` and `Time`.
-        data[,datetime:= mapply(function (date, time) strptime(paste(date, time), '%d/%m/%Y %H:%M:%S'),
-                                Date, Time)]
+        data[,datetime:= strptime(paste(data$Date, data$Time), '%d/%m/%Y %H:%M:%S')]
         data
 }
 
@@ -29,7 +28,6 @@ plot1 <- function () {
         hist(data$Global_active_power,
              col='red',
              xlab='Global Active Power (kilowatts)',
-             xaxp=c(0,6,3),
              main='Global Active Power')
         dev.off()
         data

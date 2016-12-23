@@ -17,27 +17,21 @@ readData <- function () {
         # Select data from days Feb. 1st and 2nd, year 2007. 
         data <- allData[Date == '1/2/2007' | Date == '2/2/2007',]
         # Add a new field `datetime`. It combines fields `Date` and `Time`.
-        data[,datetime:= mapply(function (date, time) strptime(paste(date, time), '%d/%m/%Y %H:%M:%S'),
-                                Date, Time)]
+        data[,datetime:= strptime(paste(data$Date, data$Time), '%d/%m/%Y %H:%M:%S')]
         data
 }
 
 # This function makes `plot3.png`.
 plot3 <- function () {
         data <- readData()
-        datetimeRange <- range(data$datetime)
         png('plot3.png', bg='transparent', width=480, height=480)
         
         # Make a plot with no data
         plot(data$Sub_metering_1 ~ data$datetime, data,
              type = 'n',
-             xaxt = 'n',
              ylab ='Energy sub metering',
              xlab =NA)
         # Draw the X axis tickmarks
-        axis(1,
-             at = c(datetimeRange[1], 0.5*(datetimeRange[1]+datetimeRange[2]), datetimeRange[2]),
-             labels = c('Thu', 'Fri', 'Sat'))
         # Add a legend
         legend('topright',
                lty=1, # We want lines in the legend

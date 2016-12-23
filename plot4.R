@@ -17,8 +17,7 @@ readData <- function () {
         # Select data from days Feb. 1st and 2nd, year 2007. 
         data <- allData[Date == '1/2/2007' | Date == '2/2/2007',]
         # Add a new field `datetime`. It combines fields `Date` and `Time`.
-        data[,datetime:= mapply(function (date, time) strptime(paste(date, time), '%d/%m/%Y %H:%M:%S'),
-                                Date, Time)]
+        data[,datetime:= strptime(paste(data$Date, data$Time), '%d/%m/%Y %H:%M:%S')]
         data
 }
 
@@ -30,29 +29,18 @@ plot4 <- function () {
         # 1. sub plot
         plot(data$Global_active_power ~ data$datetime, data, type='l',
              ylab = 'Global Active Power',
-             xaxt = 'n',
              xlab=NA)
-        datetimeRange <- range(data$datetime)
-        axis(1, at = c(datetimeRange[1], 0.5*(datetimeRange[1]+datetimeRange[2]), datetimeRange[2]),
-             labels = c('Thu', 'Fri', 'Sat'))
         # 2. sub plot
         plot(data$Voltage ~ data$datetime, data, type='l',
              ylab = 'Voltage',
-             xaxt = 'n',
              xlab='datetime')
-        axis(1, at = c(datetimeRange[1], 0.5*(datetimeRange[1]+datetimeRange[2]), datetimeRange[2]),
-             labels = c('Thu', 'Fri', 'Sat'))
         # 3. sub plot
         # Make a plot with no data
         plot(data$Sub_metering_1 ~ data$datetime, data,
              type = 'n',
-             xaxt = 'n',
              ylab ='Energy sub metering',
              xlab =NA)
         # Draw the X axis tickmarks
-        axis(1,
-             at = c(datetimeRange[1], 0.5*(datetimeRange[1]+datetimeRange[2]), datetimeRange[2]),
-             labels = c('Thu', 'Fri', 'Sat'))
         # Add a legend
         legend('topright',
                lty=1, # We want lines in the legend
@@ -67,10 +55,7 @@ plot4 <- function () {
         # 4. sub plot
         plot(data$Global_reactive_power ~ data$datetime, data, type='l',
              ylab = 'Global Reactive Power',
-             xaxt = 'n',
              xlab='datetime')
-        axis(1, at = c(datetimeRange[1], 0.5*(datetimeRange[1]+datetimeRange[2]), datetimeRange[2]),
-             labels = c('Thu', 'Fri', 'Sat'))
         dev.off()
         data
 }
